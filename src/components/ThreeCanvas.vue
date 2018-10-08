@@ -6,6 +6,7 @@
 <script>
 
 import 'three'
+import 'three/OrbitControls'
 
 export default {
   data: () => ({
@@ -13,6 +14,7 @@ export default {
     $scene: null,
     $renderer: null,
     $camera: null,
+    $controls: null,
     entities: [] //<-- array to hold items
   }),
 
@@ -57,6 +59,9 @@ export default {
     this.$camera.position.set( 20, 20, 20 ); // all components equal
     this.$camera.lookAt( this.$scene.position ); // or the origin
 
+    this.$controls = new THREE.OrbitControls( this.$camera );
+    this.$controls.update()
+
     /*this.$camera =
       new THREE.PerspectiveCamera(
         VIEW_ANGLE,
@@ -86,6 +91,7 @@ export default {
       requestAnimationFrame(animate)
       //cube.rotation.x += 0.05
       //cube.rotation.y += 0.05
+      this.$controls.update()
       this.$renderer.render(this.$scene, this.$camera)
     }
     animate()
