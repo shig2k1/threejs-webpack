@@ -33,8 +33,8 @@ export default {
 
   mounted () {
     // Set the scene size.
-    const WIDTH = 400
-    const HEIGHT = 300
+    const WIDTH = 1024
+    const HEIGHT = 780
 
     // Set some camera attributes.
     // const VIEW_ANGLE = 45
@@ -71,8 +71,14 @@ export default {
       )
     */
 
-    var light = new THREE.AmbientLight( 0xffffff )
+    var aLight = new THREE.AmbientLight( 0xDDDDDD )
 
+    var light = new THREE.DirectionalLight(0xEEEEEE, 1);
+    light.castShadow = true;
+    light.shadowCameraVisible = true;
+    light.position.set(-3, 1, 5);
+
+    this.$scene.add(aLight)
     this.$scene.add(light)
 
     this.$camera.position.z = 50
