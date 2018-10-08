@@ -1,19 +1,33 @@
 <template lang="pug">
   #canvas
+    slot
 </template>
 
 <script>
 
 import 'three'
-import { MTLLoader, OBJLoader } from 'three-obj-mtl-loader'
 
 export default {
   data: () => ({
     $container: null,
     $scene: null,
     $renderer: null,
-    $camera: null
+    $camera: null,
+    entities: [] //<-- array to hold items
   }),
+
+  methods: {
+    addEntity (entity) {
+      // keep reference
+      this.entities.push (entity)
+      // add to scene
+      this.$scene.add(entity)
+    },
+    removeEntity (entity) {
+      console.log('remove!')
+      this.entities = [ ...this.entities.filter(e => e !== entity) ]
+    }
+  },
 
   mounted () {
     // Set the scene size.
@@ -21,10 +35,10 @@ export default {
     const HEIGHT = 300
 
     // Set some camera attributes.
-    const VIEW_ANGLE = 45
-    const ASPECT = WIDTH / HEIGHT
-    const NEAR = 0.1
-    const FAR = 10000
+    // const VIEW_ANGLE = 45
+    // const ASPECT = WIDTH / HEIGHT
+    // const NEAR = 0.1
+    // const FAR = 10000
 
     // Get the DOM element to attach to
     this.$container = this.$el
@@ -32,26 +46,32 @@ export default {
     // Create a WebGL renderer, camera
     // and a scene
     this.$renderer = new THREE.WebGLRenderer()
-    this.$camera =
+   
+    
+    this.$scene = new THREE.Scene()
+
+    var aspect = WIDTH / HEIGHT
+    var d = 50;
+    this.$camera = new THREE.OrthographicCamera( - d * aspect, d * aspect, d, - d, 1, 1000 );
+
+    this.$camera.position.set( 20, 20, 20 ); // all components equal
+    this.$camera.lookAt( this.$scene.position ); // or the origin
+
+    /*this.$camera =
       new THREE.PerspectiveCamera(
         VIEW_ANGLE,
         ASPECT,
         NEAR,
         FAR
       )
-
-var pivot, mesh
-
-    this.$scene = new THREE.Scene()
-    const mtlLoader = new MTLLoader()
-    const objLoader = new OBJLoader()
+    */
 
     var light = new THREE.AmbientLight( 0xffffff )
 
     this.$scene.add(light)
 
     this.$camera.position.z = 50
-    
+
     // Add the camera to the scene.
     this.$scene.add(this.$camera)
 
@@ -62,26 +82,11 @@ var pivot, mesh
     // DOM element.
     this.$container.appendChild(this.$renderer.domElement)
 
-    mtlLoader.load('./assets/computer.mtl', (materials) => {
-      materials.preload()
-      objLoader.setMaterials(materials)
-      objLoader.load('./assets/computer.obj', (obj => {
-        pivot = new THREE.Object3D();
-        obj.position.y = -10
-        pivot.add(obj)
-        this.$scene.add(pivot)
-      }))
-    })
-
     const animate = () => {
       requestAnimationFrame(animate)
       //cube.rotation.x += 0.05
       //cube.rotation.y += 0.05
       this.$renderer.render(this.$scene, this.$camera)
-      if (pivot) {
-        //pivot.rotation.x += 0.05
-        pivot.rotation.y += 0.05
-      }
     }
     animate()
   }
