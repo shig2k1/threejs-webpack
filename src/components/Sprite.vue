@@ -4,6 +4,8 @@ import { MTLLoader, OBJLoader } from 'three-obj-mtl-loader'
 const mtlLoader = new MTLLoader()
 const objLoader = new OBJLoader()
 
+const TILE_SIZE = 30
+
 export default {
   props: {
     name: {
@@ -17,6 +19,10 @@ export default {
     },
     z: {
       type: Number
+    },
+    rotate: {
+      type: Number,
+      default: 0
     }
   },
   
@@ -25,28 +31,42 @@ export default {
   }),
 
   watch: {
-    x () {
-      this.$sprite.position.x = this.x
+    x (nv, ov) {
+      if (nv !== ov) this.setPosition()
     },
-    y () {
-      this.$sprite.position.y = this.y
+    y (nv, ov) {
+      if (nv !== ov) this.setPosition()
     },
-    z () {
-      this.$sprite.position.z = this.z
+    z (nv, ov) {
+      if (nv !== ov) this.setPosition()
+    }
+  },
+
+  methods: {
+    setPosition () {
+      this.$sprite.position.x = this.x * TILE_SIZE
+      this.$sprite.position.y = this.y * TILE_SIZE
+      this.$sprite.position.z = this.z * TILE_SIZE
     }
   },
   
   created () {
+    //declared once at the top of your code
+    var axis = new THREE.Vector3(0,0.5,0);//tilted a bit on x and y - feel free to plug your different axis here
+    //in your update/draw function
+    
+
     var pivot
     mtlLoader.load(`./assets/${this.name}.mtl`, (materials) => {
       materials.preload()
       objLoader.setMaterials(materials)
       objLoader.load(`./assets/${this.name}.obj`, (obj => {
         this.$sprite = new THREE.Object3D();
-        obj.position.y = -10
-        this.$sprite.position.x = this.x
-        this.$sprite.position.y = this.y
-        this.$sprite.position.z = this.z
+        this.setPosition()
+        // rad += radIncrement;
+        obj.rotateOnAxis(axis,2)
+
+        //this.$sprite.rotation.y = 3
         this.$sprite.add(obj)
 
         // add this entity to the parent scene
@@ -56,7 +76,7 @@ export default {
   },
 
   render() {
-    //return this.$scopedSlots.default({})
+    return null
   },
 
   beforeDestroy () {

@@ -1,9 +1,8 @@
 <template lang="pug">
   .home
     three-canvas
-      sprite(name="computer" :x="1" :y="0" :z="0")
-      sprite(name="box" :x="20" :y="0" :z="0")
-      sprite(name="box" :x="20" :y="0" :z="20")
+      sprite(name="room/arcade" :x="1" :y="0" :z="0")
+      sprite(name="room/tm" :x="2" :y="0" :z="0" :rotate="2")
 </template>
 
 <script>

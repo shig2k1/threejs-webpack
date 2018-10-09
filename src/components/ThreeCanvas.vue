@@ -33,8 +33,8 @@ export default {
 
   mounted () {
     // Set the scene size.
-    const WIDTH = 1024
-    const HEIGHT = 780
+    const WIDTH = 1200
+    const HEIGHT = 800
 
     // Set some camera attributes.
     // const VIEW_ANGLE = 45
@@ -56,7 +56,7 @@ export default {
     var d = 50;
     this.$camera = new THREE.OrthographicCamera( - d * aspect, d * aspect, d, - d, 1, 1000 );
 
-    this.$camera.position.set( 20, 20, 20 ); // all components equal
+    this.$camera.position.set( 120, 120, 120 ); // all components equal
     this.$camera.lookAt( this.$scene.position ); // or the origin
 
     this.$controls = new THREE.OrbitControls( this.$camera );
