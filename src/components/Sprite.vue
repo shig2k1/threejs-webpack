@@ -4,7 +4,7 @@ import { MTLLoader, OBJLoader } from 'three-obj-mtl-loader'
 const mtlLoader = new MTLLoader()
 const objLoader = new OBJLoader()
 
-const TILE_SIZE = 30
+const TILE_SIZE = 3
 
 export default {
   props: {
@@ -30,6 +30,7 @@ export default {
     $sprite: null,
     $bBoxHelper: null,
     $axisHelper: null,
+    axis: null,
     speed: 0.01
   }),
 
@@ -42,18 +43,21 @@ export default {
     },
     z (nv, ov) {
       if (nv !== ov) this.setPosition()
+    },
+    rotate (nv, ov) {
+      if (nv !== ov) this.setRotation()
     }
   },
 
   methods: {
     setPosition () {
-      this.$sprite.position.x = this.x * TILE_SIZE
+      this.$sprite.position.x = (this.x * TILE_SIZE) - 1.5
       this.$sprite.position.y = this.y * TILE_SIZE
-      this.$sprite.position.z = this.z * TILE_SIZE
-    }
-  },
-
-  methods: {
+      this.$sprite.position.z = (this.z * TILE_SIZE) - 1.5
+    },
+    setRotation () {
+      if (this.$sprite && this.rotate) this.$sprite.rotateOnAxis(this.axis, (this.rotate * Math.PI)/180)
+    },
     animate () {
       
     }
@@ -61,7 +65,7 @@ export default {
   
   created () {
     //declared once at the top of your code
-    var axis = new THREE.Vector3(0,0.5,0);//tilted a bit on x and y - feel free to plug your different axis here
+    this.axis = new THREE.Vector3(0,1,0);//tilted a bit on x and y - feel free to plug your different axis here
     //in your update/draw function
     
 
@@ -71,9 +75,10 @@ export default {
       objLoader.setMaterials(materials)
       objLoader.load(`./assets/${this.name}.obj`, (obj => {
         this.$sprite = new THREE.Object3D();
+        
         this.setPosition()
-        // rad += radIncrement;
-        obj.rotateOnAxis(axis,2)
+
+        obj.scale.set(0.1, 0.1, 0.1)
 
         //this.$sprite.rotation.y = 3
         this.$sprite.add(obj)
@@ -81,15 +86,13 @@ export default {
         // add this entity to the parent scene
         this.$parent.addEntity(this.$sprite)
 
-        this.$bBoxHelper = new THREE.BoundingBoxHelper(this.$sprite, 0x999999)
+        this.$bBoxHelper = new THREE.BoxHelper(this.$sprite, 0x999999)
         this.$parent.$scene.add(this.$bBoxHelper)
 
-        this.$axisHelper = new THREE.AxisHelper(18)
+        this.$axisHelper = new THREE.AxesHelper(18)
         this.$sprite.add(this.$axisHelper)
-
-        var axis = new THREE.Vector3(0, 1, 0).normalize()
-        if (this.$sprite) this.$sprite.rotateOnAxis(axis, (270 * Math.PI)/180)
-
+        
+        this.setRotation()
       }))
     })
   },

@@ -53,7 +53,7 @@ export default {
     this.$scene = new THREE.Scene()
 
     var aspect = WIDTH / HEIGHT
-    var d = 50;
+    var d = 10;
     this.$camera = new THREE.OrthographicCamera( - d * aspect, d * aspect, d, - d, 1, 1000 );
 
     this.$camera.position.set( 120, 120, 120 ); // all components equal
@@ -62,7 +62,7 @@ export default {
     this.$controls = new THREE.OrbitControls( this.$camera );
     this.$controls.update()
 
-    let plane = new THREE.GridHelper(100, 10)
+    let plane = new THREE.GridHelper(90, 30)
     this.$scene.add(plane)
 
     /*this.$camera =
