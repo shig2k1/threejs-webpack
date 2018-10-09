@@ -62,6 +62,9 @@ export default {
     this.$controls = new THREE.OrbitControls( this.$camera );
     this.$controls.update()
 
+    let plane = new THREE.GridHelper(100, 10)
+    this.$scene.add(plane)
+
     /*this.$camera =
       new THREE.PerspectiveCamera(
         VIEW_ANGLE,
@@ -99,6 +102,12 @@ export default {
       //cube.rotation.y += 0.05
       this.$controls.update()
       this.$renderer.render(this.$scene, this.$camera)
+
+      if (this.$children) {
+        this.$children.forEach(child => {
+          child.animate()
+        })
+      }
     }
     animate()
   }

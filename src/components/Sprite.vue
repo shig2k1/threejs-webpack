@@ -27,7 +27,10 @@ export default {
   },
   
   data: () => ({
-    $sprite: null
+    $sprite: null,
+    $bBoxHelper: null,
+    $axisHelper: null,
+    speed: 0.01
   }),
 
   watch: {
@@ -47,6 +50,12 @@ export default {
       this.$sprite.position.x = this.x * TILE_SIZE
       this.$sprite.position.y = this.y * TILE_SIZE
       this.$sprite.position.z = this.z * TILE_SIZE
+    }
+  },
+
+  methods: {
+    animate () {
+      
     }
   },
   
@@ -71,6 +80,16 @@ export default {
 
         // add this entity to the parent scene
         this.$parent.addEntity(this.$sprite)
+
+        this.$bBoxHelper = new THREE.BoundingBoxHelper(this.$sprite, 0x999999)
+        this.$parent.$scene.add(this.$bBoxHelper)
+
+        this.$axisHelper = new THREE.AxisHelper(18)
+        this.$sprite.add(this.$axisHelper)
+
+        var axis = new THREE.Vector3(0, 1, 0).normalize()
+        if (this.$sprite) this.$sprite.rotateOnAxis(axis, (270 * Math.PI)/180)
+
       }))
     })
   },
