@@ -86,12 +86,12 @@ export default {
         // add this entity to the parent scene
         this.$parent.addEntity(this.$sprite)
 
-        this.$bBoxHelper = new THREE.BoxHelper(this.$sprite, 0x999999)
+        /*this.$bBoxHelper = new THREE.BoxHelper(this.$sprite, 0x999999)
         this.$parent.$scene.add(this.$bBoxHelper)
 
         this.$axisHelper = new THREE.AxesHelper(18)
         this.$sprite.add(this.$axisHelper)
-        
+        */
         this.setRotation()
       }))
     })
