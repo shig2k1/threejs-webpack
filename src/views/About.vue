@@ -1,5 +1,18 @@
-<template>
-  <div class="about">
-    <h1>This is an about page</h1>
-  </div>
+<template lang="pug">
+  Plant
 </template>
+
+<script>
+import Plant from '@/components/Plant'
+
+export default {
+  components: {
+    Plant,
+  },
+
+  mounted () {
+    
+  }
+
+}
+</script>
